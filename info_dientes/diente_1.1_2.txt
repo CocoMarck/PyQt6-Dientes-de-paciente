@@ -1,0 +1,3 @@
+color: blue
+number: 1.1
+number_square: 2

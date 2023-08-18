@@ -1,0 +1,3 @@
+color: green
+number: 1.3
+number_square: 3
