@@ -1,9 +1,7 @@
 from Modulos.Modulo_System import CleanScreen
-from Modulos.color_diente import (
-    get_diente,
-    save_diente,
-    get_section_color
-)
+import csv
+import pandas as pd
+import os
 
 import sys
 from PyQt6.QtWidgets import(
@@ -18,8 +16,18 @@ from PyQt6.QtWidgets import(
 from PyQt6.QtCore import Qt
 from functools import partial
 
-# Probar get diente
-print(get_diente())
+def get_dientes(diente='info_dientes/diente_1.8.csv'):
+    with open(diente, 'r', newline='') as info_diente:
+        text_diente = csv.reader(info_diente)
+        list_diente = []
+        for line in text_diente:
+            print(
+                f'{type( int(line[0]) )} {line[0]}\n'
+                f'{type( line[1] )} {line[1]}\n'
+            )
+            list_diente.append( [ line[0], line[1] ] )
+        return list_diente
+get_dientes()
 
 
 class Window_Main(QWidget):
@@ -63,13 +71,6 @@ class Window_Main(QWidget):
 
             # Boton 1
             button_color = QPushButton()
-
-            color = get_section_color(diente=number, section=1)
-            if not color == None:
-                button_color.setStyleSheet(
-                    f'background-color: {color}' 
-                )
-
             button_color.clicked.connect(
                 partial(
                     self.evt_change_color_good, button=button_color,
@@ -81,13 +82,6 @@ class Window_Main(QWidget):
 
             # Boton 2
             button_color = QPushButton()
-            
-            color = get_section_color(diente=number, section=2)
-            if not color == None:
-                button_color.setStyleSheet(
-                    f'background-color: {color}' 
-                )
-
             button_color.clicked.connect(
                 partial(
                     self.evt_change_color_good, button=button_color,
@@ -99,13 +93,6 @@ class Window_Main(QWidget):
 
             # Boton 3
             button_color = QPushButton()
-
-            color = get_section_color(diente=number, section=3)
-            if not color == None:
-                button_color.setStyleSheet(
-                    f'background-color: {color}' 
-                )
-
             button_color.clicked.connect(
                 partial(
                     self.evt_change_color_good, button=button_color,
@@ -117,13 +104,6 @@ class Window_Main(QWidget):
 
             # Boton 4
             button_color = QPushButton()
-            
-            color = get_section_color(diente=number, section=4)
-            if not color == None:
-                button_color.setStyleSheet(
-                    f'background-color: {color}' 
-                )
-
             button_color.clicked.connect(
                 partial(
                     self.evt_change_color_good, button=button_color,
@@ -135,13 +115,6 @@ class Window_Main(QWidget):
 
             # Boton 5
             button_color = QPushButton()
-
-            color = get_section_color(diente=number, section=5)
-            if not color == None:
-                button_color.setStyleSheet(
-                    f'background-color: {color}' 
-                )
-
             button_color.clicked.connect(
                 partial(
                     self.evt_change_color_good, button=button_color,
@@ -187,12 +160,50 @@ class Window_Main(QWidget):
         )
         print(info)
 
-        # Guardar diente
-        save_diente(
-            number=number,
-            section=number_square,
-            color=color
+        #Guardar info
+        diente_csv = f'info_dientes/diente_{number}.csv'
+        with open(
+            diente_csv,
+            'a', newline=''
+        ) as info_text:
+            if os.path.isfile(diente_csv):
+                with open(diente_csv, 'r+') as f:
+                    text = f.read()
+                    f.seek(0, 0)
+                    f.write(
+                        (
+                            f'{number_square},{color}'
+                        ).rstrip('\r\n') + '\n' + text
+                    )
+            else:
+                writer_csv = csv.writer(info_text, delimiter=',')
+                writer_csv.writerow(
+                    [
+                    str(number_square),
+                    str(color)
+                    ]
+                )
+        df = pd.read_csv(
+            f'info_dientes/diente_{number}.csv',  sep=',', header=None
         )
+        csv_final = df.drop_duplicates(0)
+        csv_final.to_csv(
+            f'info_dientes/diente_{number}.csv',
+            sep=',',
+            header=None, index=False
+        )
+        print(csv_final)
+        
+                    
+        #Guardar info
+        #with open(
+        #    f'info_dientes/diente_{number}.txt',
+        #    'a'
+        #) as info_text:
+        #    info_text.write(
+        #        f'diente={number_square},{color}\n'
+        #        '\n'
+        #    )
 
 
 if __name__ == '__main__':
