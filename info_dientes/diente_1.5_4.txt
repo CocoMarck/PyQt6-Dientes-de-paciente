@@ -1,3 +1,0 @@
-color: red
-number: 1.5
-number_square: 4
