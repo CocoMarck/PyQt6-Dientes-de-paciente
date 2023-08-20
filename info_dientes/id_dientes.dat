@@ -1,8 +1,8 @@
 all_id=3
 # Numero de ids - Carpetas de Pacientes
 
-current_id=3
+current_id=
 # ID actual - Carpeta del paciente actual
 
-current_id_name=Una tercera persona
+current_id_name=
 # Nombre actual del id - nombre del paciente

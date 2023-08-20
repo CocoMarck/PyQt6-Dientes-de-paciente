@@ -122,7 +122,8 @@ def save_paciente(name=None):
                 )
         for paciente in list_paciente:
             if paciente == name:
-                same_name = True
+                #same_name = True ;Desactivar esta funcion, ya que no es tan necesaria.
+                same_name = False
             else:
                 same_name = False
     else:
