@@ -1,6 +1,18 @@
 from Modulos.Modulo_System import CleanScreen
 from Modulos.color_diente import (
+    get_data,
+    get_id,
+    get_all_id,
+    
+    get_id_name,
+    get_id_dir,
+
     get_diente,
+    
+    set_id,
+    
+    save_paciente,
+
     save_diente,
     get_section_color
 )
@@ -17,6 +29,16 @@ from PyQt6.QtWidgets import(
 )
 from PyQt6.QtCore import Qt
 from functools import partial
+
+
+# Probar metodos para los pacientes
+save_paciente(name='Donde estoy')
+#set_id(id=1)
+input(get_data())
+input( get_id_name() )
+input( get_id_dir() )
+input( f'{type( get_id() )} {get_id()}' )
+input( f'{type( get_all_id() )} {get_all_id()}' )
 
 # Probar get diente
 print(get_diente())
