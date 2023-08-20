@@ -86,6 +86,22 @@ def get_id_dir():
         return f'{dir_dientes}/{current_id}'
 
 
+def get_pacientes():
+    paciente_csv = f'{dir_dientes}/paciente.csv'
+    if os.path.isfile(paciente_csv):
+        with open(paciente_csv, 'r') as paciente:
+            text_paciente = csv.reader(paciente)
+            list_paciente = []
+            for line in text_paciente:
+                list_paciente.append( 
+                    [ int(line[0]), line[1], int(line[2]), line[3] ]
+                )
+
+        return list_paciente
+    else:
+        pass
+
+
 def save_paciente(name=None):
     '''Guardar un paciente, se guarda un id y su nombre establecido por el parametro "name", la fecha en que se guardo y se establece en el archivo "id_dientes.dat"'''
     if type(name) is str:
@@ -128,6 +144,7 @@ def save_paciente(name=None):
                 [
                 int(current_id),
                 str(name),
+                int(0),
                 '0000-00-00'
                 ]
             )
@@ -167,16 +184,25 @@ def set_id(id=0):
                     list_paciente = []
                     for line in text_paciente:
                         list_paciente.append( 
-                            [ int(line[0]), line[1], line[2] ]
+                            [ int(line[0]), line[1], line[2], line[3] ]
                         )
 
+                # Establecer parametros para agregarlos al "id_dientes.dat"
                 current_id = id
                 name = ''
+                remove = 0
                 for paciente in list_paciente:
                     if paciente[0] == id:
                         name = paciente[1]
+                        remove = int(paciente[2])
                     else: 
                         pass
+
+                if remove == 1:
+                    current_id = ''
+                    name = ''
+                else:
+                    pass
 
                 # Establecer el id creado en "id_dientes.dat"
                 id_dientes_archive = get_data(mode_dict=False)
@@ -198,6 +224,59 @@ def set_id(id=0):
             pass
     else:
         pass
+
+
+def remove_id(id=None, superdel=False):
+    '''Dar de baja un paciente'''
+    list_pacientes = get_pacientes()
+    if (
+        not list_pacientes == None and
+        not id == None
+    ):
+        print(list_pacientes)
+        paciente_csv = f'{dir_dientes}/paciente.csv'
+        with open(paciente_csv, 'w') as text_csv:
+            text_csv.write('')
+            
+        for paciente in list_pacientes:
+            remove = 0
+            the_id = paciente[0]
+            name = paciente[1]
+            date = paciente[3]
+            if id == paciente[0]:
+                if not paciente[2] == 1:
+                    remove = 1
+                else:
+                    remove = paciente[2]
+            else:
+                pass
+            with open(
+                paciente_csv, 'a', newline=''
+            ) as text_csv:
+                writer_csv = csv.writer(text_csv, delimiter=',')
+                writer_csv.writerow(
+                    [
+                    int(the_id),
+                    str(name),
+                    int(remove),
+                    str(date)
+                    ]
+                )
+
+        # Reiniciar parametros a los default en "id_dientes.dat"
+        id_dientes_archive = get_data(mode_dict=False)
+        text_ready = ''
+        for line in id_dientes_archive.split('\n'):
+            if line.startswith('current_id='):
+                line = f'current_id='
+            elif line.startswith('current_id_name='):
+                line = f'current_id_name='
+            else:
+                pass
+            text_ready += line + '\n'
+        
+        with open(f'{dir_dientes}/id_dientes.dat', 'w') as id_dientes:
+            id_dientes.write( text_ready[:-1] )
 
 
 def get_section_color(diente=1.8, section=1):

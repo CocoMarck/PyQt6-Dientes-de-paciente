@@ -4,5 +4,5 @@ all_id=3
 current_id=3
 # ID actual - Carpeta del paciente actual
 
-current_id_name=Donde estoy
+current_id_name=Una tercera persona
 # Nombre actual del id - nombre del paciente

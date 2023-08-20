@@ -9,12 +9,17 @@ from Modulos.color_diente import (
 
     get_diente,
     
-    set_id,
+    get_pacientes,
+    
+    get_section_color,
     
     save_paciente,
 
     save_diente,
-    get_section_color
+
+    set_id,
+    
+    remove_id,
 )
 
 import sys
@@ -32,13 +37,28 @@ from functools import partial
 
 
 # Probar metodos para los pacientes
-save_paciente(name='Donde estoy')
+list_paciente = get_pacientes()
+if not list_paciente == None:
+    for paciente in list_paciente:
+        print(
+            f'ID: {paciente[0]}\n'
+            f'Name: {paciente[1]}\n'
+            f'Remove: {paciente[2]}\n'
+            f'Date: {paciente[3]}\n\n'
+        )
+
+save_paciente(name='Una tercera persona')
+#remove_id(id=2)
 #set_id(id=1)
-input(get_data())
-input( get_id_name() )
-input( get_id_dir() )
-input( f'{type( get_id() )} {get_id()}' )
-input( f'{type( get_all_id() )} {get_all_id()}' )
+
+print(get_data())
+print( get_id_name() )
+print( get_id_dir() )
+print( f'{type( get_id() )} {get_id()}' )
+print( f'{type( get_all_id() )} {get_all_id()}' )
+
+print(get_pacientes())
+input()
 
 # Probar get diente
 print(get_diente())
@@ -55,13 +75,138 @@ class Window_Main(QWidget):
         vbox_main = QVBoxLayout()
         self.setLayout(vbox_main)
         
+        # Espacio entre botones
+        space = int(square*1.1)
+        
         # Contenedor Horizontal - Botones
         hbox = QHBoxLayout()
-        hbox.setSpacing(24) # Espaciado entre lo contenido en el hbox
+        hbox.setSpacing(space) # Espaciado entre lo contenido en el hbox
         vbox_main.addLayout(hbox)
+        
+        hbox.addStretch()
         
         number = 1.9
         for i in range(0, 8, 1):
+            # Grid para posicionar botones
+            # Numero de diente y Botones
+            # Posicionados asi:
+            # Numero
+            # 1   2
+            #   3
+            # 4   5
+            grid = QGridLayout()
+            grid.setSpacing(0) # Ecpaciado entre botones
+            hbox.addLayout(grid)
+            
+            # Numero de diente
+            number -= 0.1
+            number = round(number, 2)
+            button = QPushButton(str(number))
+            button.setFixedSize(square, square)
+            grid.addWidget(button, 0, 0)
+            #label = QLabel(str(round(number, 2)))
+            #label.setAlignment(Qt.AlignmentFlag.AlignBottom)
+            #grid.addWidget(label, 0, 0)
+
+            # Boton 1
+            button_color = QPushButton()
+
+            color = get_section_color(diente=number, section=1)
+            if not color == None:
+                button_color.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+            button_color.clicked.connect(
+                partial(
+                    self.evt_change_color_good, button=button_color,
+                    number=number, number_square=1
+                )
+            )
+            button_color.setFixedSize(square, square)
+            grid.addWidget(button_color, 1, 0)
+
+            # Boton 2
+            button_color = QPushButton()
+            
+            color = get_section_color(diente=number, section=2)
+            if not color == None:
+                button_color.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+            button_color.clicked.connect(
+                partial(
+                    self.evt_change_color_good, button=button_color,
+                    number=number, number_square=2
+                )
+            )
+            button_color.setFixedSize(square, square)
+            grid.addWidget(button_color, 1, 3)
+
+            # Boton 3
+            button_color = QPushButton()
+
+            color = get_section_color(diente=number, section=3)
+            if not color == None:
+                button_color.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+            button_color.clicked.connect(
+                partial(
+                    self.evt_change_color_good, button=button_color,
+                    number=number, number_square=3
+                )
+            )
+            button_color.setFixedSize(square, square)
+            grid.addWidget(button_color, 2, 2)
+
+            # Boton 4
+            button_color = QPushButton()
+            
+            color = get_section_color(diente=number, section=4)
+            if not color == None:
+                button_color.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+            button_color.clicked.connect(
+                partial(
+                    self.evt_change_color_good, button=button_color,
+                    number=number, number_square=4
+                )
+            )
+            button_color.setFixedSize(square, square)
+            grid.addWidget(button_color, 3, 0)
+
+            # Boton 5
+            button_color = QPushButton()
+
+            color = get_section_color(diente=number, section=5)
+            if not color == None:
+                button_color.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+            button_color.clicked.connect(
+                partial(
+                    self.evt_change_color_good, button=button_color,
+                    number=number, number_square=5
+                )
+            )
+            button_color.setFixedSize(square, square)
+            grid.addWidget(button_color, 3, 3)
+
+
+        # Contenedor Horizontal - Botones
+        hbox = QHBoxLayout()
+        hbox.setSpacing(space) # Espaciado entre lo contenido en el hbox
+        hbox.addStretch()
+        vbox_main.addLayout(hbox)
+        
+        number = 5.6
+        for i in range(0, 5, 1):
             # Grid para posicionar botones
             # Numero de diente y Botones
             # Posicionados asi:
