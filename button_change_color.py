@@ -30,7 +30,9 @@ from PyQt6.QtWidgets import(
     QHBoxLayout,
     QGridLayout,
     QLabel,
-    QPushButton
+    QPushButton,
+    QLineEdit,
+    QComboBox
 )
 from PyQt6.QtCore import Qt
 from functools import partial
@@ -51,14 +53,14 @@ if not list_paciente == None:
 #remove_id(id=2)
 #set_id(id=2)
 
-print(get_data())
-print( get_id_name() )
-print( get_id_dir() )
-print( f'{type( get_id() )} {get_id()}' )
-print( f'{type( get_all_id() )} {get_all_id()}' )
+#print(get_data())
+#print( get_id_name() )
+#print( get_id_dir() )
+#print( f'{type( get_id() )} {get_id()}' )
+#print( f'{type( get_all_id() )} {get_all_id()}' )
 
-print(get_pacientes())
-input()
+#print(get_pacientes())
+#input()
 
 # Probar get diente
 print(get_diente())
@@ -74,6 +76,51 @@ class Window_Main(QWidget):
         # Contenedor principal
         vbox_main = QVBoxLayout()
         self.setLayout(vbox_main)
+        
+        # Seccion Vertical 0
+        # Boton para guardar y borrar, y seleccionar paciente
+        # Contenedor Horizontal
+        hbox = QHBoxLayout()
+        vbox_main.addLayout(hbox)
+        
+        button_set_paciente = QPushButton('Seleccionar')
+        button_set_paciente.clicked.connect(self.evt_set_paciente)
+        hbox.addWidget(button_set_paciente)
+        
+        hbox.addStretch()
+        
+        self.combobox_paciente = QComboBox()
+        list_paciente = get_pacientes()
+        if not list_paciente == None:
+            for paciente in list_paciente:
+                if paciente[2] == 0:
+                    self.combobox_paciente.addItem(paciente[1])
+
+            current_paciente = get_id_name()
+            if not current_paciente == None:
+                current_paciente = self.combobox_paciente.findText(
+                    current_paciente
+                )
+                self.combobox_paciente.setCurrentIndex(current_paciente)
+                
+
+        hbox.addWidget(self.combobox_paciente)
+        
+        hbox.addStretch()
+        
+        vbox = QVBoxLayout()
+        hbox.addLayout(vbox)
+
+        button_new_paciente = QPushButton('Nuevo')
+        button_new_paciente.clicked.connect(self.evt_new_paciente)
+        vbox.addWidget(button_new_paciente)
+        
+        button_remove_paciente = QPushButton('Eliminar')
+        button_remove_paciente.clicked.connect(self.evt_remove_paciente)
+        vbox.addWidget(button_remove_paciente)
+        
+        # Espaciando, para separar botones de dientes, de botones de sleccion de paciente
+        vbox_main.addStretch()
         
         # Espacio entre botones
         space = int(square*1.1)
@@ -217,11 +264,14 @@ class Window_Main(QWidget):
             hbox.addLayout(
                 self.diente_buttons(number=number, square=square)
             )
+            
+        hbox.addStretch()
+        
+        # Espaciando, para separar botones de dientes, de botones de sleccion de paciente
+        vbox_main.addStretch()
         
         # Mostrar todo
         self.show()
-        
-        hbox.addStretch()
     
     def diente_buttons(self, number=1.8, square=24):
         # Grid para posicionar botones
@@ -331,6 +381,28 @@ class Window_Main(QWidget):
         
         return grid
     
+    def evt_set_paciente(self):
+        dict_paciente = {}
+    
+        list_paciente = get_pacientes()
+        if not list_paciente == None:
+            for paciente in list_paciente:
+                if paciente[2] == 0:
+                    dict_paciente.update( {paciente[1] : paciente[0]} )
+        
+        paciente = self.combobox_paciente.currentText()
+        if paciente in dict_paciente:
+            set_id( id=dict_paciente[paciente] )
+            # Cerrar y volver abrir el programa
+            self.close()
+        else:
+            pass
+    
+    def evt_new_paciente(self):
+        pass
+    
+    def evt_remove_paciente(self):
+        pass
             
     def evt_change_color_good(self, button, number, number_square):
         # Detectar el color actual del boton y cambiarlo en base a eso.
