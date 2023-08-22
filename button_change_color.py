@@ -1,4 +1,5 @@
 from Modulos.Modulo_System import CleanScreen
+from Modulos.Modulo_Language import get_text as Lang
 from Modulos.color_diente import (
     get_data,
     get_id,
@@ -27,6 +28,7 @@ from PyQt6.QtWidgets import(
     QApplication,
     QWidget,
     QDialog,
+    QMessageBox,
     QVBoxLayout,
     QHBoxLayout,
     QGridLayout,
@@ -40,15 +42,15 @@ from functools import partial
 
 
 # Probar metodos para los pacientes
-list_paciente = get_pacientes()
-if not list_paciente == None:
-    for paciente in list_paciente:
-        print(
-            f'ID: {paciente[0]}\n'
-            f'Name: {paciente[1]}\n'
-            f'Remove: {paciente[2]}\n'
-            f'Date: {paciente[3]}\n\n'
-        )
+#list_paciente = get_pacientes()
+#if not list_paciente == None:
+#    for paciente in list_paciente:
+#        print(
+#            f'ID: {paciente[0]}\n'
+#            f'Name: {paciente[1]}\n'
+#            f'Remove: {paciente[2]}\n'
+#            f'Date: {paciente[3]}\n\n'
+#        )
 
 #save_paciente(name='Una tercera persona')
 #remove_id(id=2)
@@ -64,14 +66,23 @@ if not list_paciente == None:
 #input()
 
 # Probar get diente
-print(get_diente())
+#print(get_diente())
+
+def warning_exit(parent=None):
+    QMessageBox.warning(
+        parent,
+        Lang('warning'),
+
+        Lang('for_now_close_app') + '\n' +
+        Lang('you_need_open_app')
+    )
 
 
 class Window_Main(QWidget):
     def __init__(self, square=20, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        self.setWindowTitle('Change button color')
+        self.setWindowTitle( Lang('paciente_teeth') )
         self.resize(256, 256)
         
         # Contenedor principal
@@ -84,7 +95,7 @@ class Window_Main(QWidget):
         hbox = QHBoxLayout()
         vbox_main.addLayout(hbox)
         
-        button_set_paciente = QPushButton('Seleccionar')
+        button_set_paciente = QPushButton(Lang('select'))
         button_set_paciente.clicked.connect(self.evt_set_paciente)
         hbox.addWidget(button_set_paciente)
         
@@ -110,11 +121,11 @@ class Window_Main(QWidget):
         vbox = QVBoxLayout()
         hbox.addLayout(vbox)
 
-        button_new_paciente = QPushButton('Nuevo')
+        button_new_paciente = QPushButton(Lang('new'))
         button_new_paciente.clicked.connect(self.evt_new_paciente)
         vbox.addWidget(button_new_paciente)
         
-        button_remove_paciente = QPushButton('Eliminar')
+        button_remove_paciente = QPushButton(Lang('remove'))
         button_remove_paciente.clicked.connect(self.evt_remove_paciente)
         vbox.addWidget(button_remove_paciente)
         
@@ -397,6 +408,7 @@ class Window_Main(QWidget):
         if paciente in dict_paciente:
             set_id( id=dict_paciente[paciente] )
             # Cerrar y volver abrir el programa
+            warning_exit(self)
             self.close()
         else:
             pass
@@ -410,6 +422,7 @@ class Window_Main(QWidget):
         dict_paciente = self.dict_paciente()
         if not dict_paciente == None:
             remove_id( dict_paciente[paciente] )
+            warning_exit(self)
             self.close()
             
     def evt_change_color_good(self, button, number, number_square):
@@ -456,7 +469,7 @@ class Window_Main(QWidget):
 class Dialog_new_paciente(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle('Agregar paciente')
+        self.setWindowTitle(Lang('add_paciente'))
         self.resize(256, -1)
         
         # Contenedor principal
@@ -466,13 +479,13 @@ class Dialog_new_paciente(QDialog):
         # Secciones verticales - Entry de paciente y button para crear paciente
         self.entry_paciente = QLineEdit(
             self,
-            placeholderText='Paciente'
+            placeholderText=Lang('paciente')
         )
         vbox_main.addWidget(self.entry_paciente)
         
         vbox_main.addStretch()
         
-        button_new_paciente = QPushButton('Agregar nuevo paciente')
+        button_new_paciente = QPushButton( Lang('add') )
         button_new_paciente.clicked.connect(self.evt_new_paciente)
         vbox_main.addWidget(button_new_paciente)
     
@@ -484,6 +497,7 @@ class Dialog_new_paciente(QDialog):
             save_paciente(paciente)
 
             # Se supone que se tiene que reiniciar la app - Y solo se cierra
+            warning_exit(self)
             app.exit()
 
 
