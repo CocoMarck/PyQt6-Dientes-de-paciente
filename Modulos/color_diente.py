@@ -240,15 +240,15 @@ def remove_id(id=None, superdel=False):
             text_csv.write('')
             
         for paciente in list_pacientes:
-            remove = 0
             the_id = paciente[0]
             name = paciente[1]
+            remove = paciente[2]
             date = paciente[3]
             if id == paciente[0]:
                 if not paciente[2] == 1:
                     remove = 1
                 else:
-                    remove = paciente[2]
+                    pass#remove = paciente[2]
             else:
                 pass
             with open(

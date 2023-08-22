@@ -26,6 +26,7 @@ import sys
 from PyQt6.QtWidgets import(
     QApplication,
     QWidget,
+    QDialog,
     QVBoxLayout,
     QHBoxLayout,
     QGridLayout,
@@ -90,11 +91,9 @@ class Window_Main(QWidget):
         hbox.addStretch()
         
         self.combobox_paciente = QComboBox()
-        list_paciente = get_pacientes()
-        if not list_paciente == None:
-            for paciente in list_paciente:
-                if paciente[2] == 0:
-                    self.combobox_paciente.addItem(paciente[1])
+        dict_paciente = self.dict_paciente()
+        for paciente in dict_paciente.keys():
+            self.combobox_paciente.addItem( paciente )
 
             current_paciente = get_id_name()
             if not current_paciente == None:
@@ -381,7 +380,7 @@ class Window_Main(QWidget):
         
         return grid
     
-    def evt_set_paciente(self):
+    def dict_paciente(self):
         dict_paciente = {}
     
         list_paciente = get_pacientes()
@@ -389,6 +388,10 @@ class Window_Main(QWidget):
             for paciente in list_paciente:
                 if paciente[2] == 0:
                     dict_paciente.update( {paciente[1] : paciente[0]} )
+            return dict_paciente
+    
+    def evt_set_paciente(self):
+        dict_paciente = self.dict_paciente()
         
         paciente = self.combobox_paciente.currentText()
         if paciente in dict_paciente:
@@ -399,10 +402,15 @@ class Window_Main(QWidget):
             pass
     
     def evt_new_paciente(self):
-        pass
+        Dialog_new_paciente(self).exec()
     
     def evt_remove_paciente(self):
-        pass
+        paciente = self.combobox_paciente.currentText()
+
+        dict_paciente = self.dict_paciente()
+        if not dict_paciente == None:
+            remove_id( dict_paciente[paciente] )
+            self.close()
             
     def evt_change_color_good(self, button, number, number_square):
         # Detectar el color actual del boton y cambiarlo en base a eso.
@@ -443,6 +451,40 @@ class Window_Main(QWidget):
             section=number_square,
             color=color
         )
+
+
+class Dialog_new_paciente(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle('Agregar paciente')
+        self.resize(256, -1)
+        
+        # Contenedor principal
+        vbox_main = QVBoxLayout()
+        self.setLayout(vbox_main)
+        
+        # Secciones verticales - Entry de paciente y button para crear paciente
+        self.entry_paciente = QLineEdit(
+            self,
+            placeholderText='Paciente'
+        )
+        vbox_main.addWidget(self.entry_paciente)
+        
+        vbox_main.addStretch()
+        
+        button_new_paciente = QPushButton('Agregar nuevo paciente')
+        button_new_paciente.clicked.connect(self.evt_new_paciente)
+        vbox_main.addWidget(button_new_paciente)
+    
+    def evt_new_paciente(self):
+        paciente = self.entry_paciente.text()
+        if paciente == '':
+            pass
+        else:
+            save_paciente(paciente)
+
+            # Se supone que se tiene que reiniciar la app - Y solo se cierra
+            app.exit()
 
 
 if __name__ == '__main__':
