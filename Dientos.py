@@ -41,11 +41,6 @@ from PyQt6.QtGui import QIcon
 from functools import partial
 
 
-#for paciente in get_pacientes():
-#    print(paciente)
-#input()
-
-
 class Window_Main(QWidget):
     def __init__(self, square=20, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -389,9 +384,9 @@ class Window_Main(QWidget):
         # Crear un nuevo paciente
         new_paciente, ok = QInputDialog.getText(
             self,
-            Lang('add_paciente'),
+            Lang('new'),
             
-            Lang('paciente')
+            Lang('add_paciente')
         )
         if ok and new_paciente:
             if new_paciente == '':
