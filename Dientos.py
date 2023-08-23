@@ -4,12 +4,8 @@ from Modulos.Modulo_System import (
 )
 from Modulos.Modulo_Language import get_text as Lang
 from Modulos.color_diente import (
-    get_data,
     get_id,
-    get_all_id,
-    
     get_id_name,
-    get_id_dir,
 
     get_diente,
     
@@ -32,6 +28,7 @@ from PyQt6.QtWidgets import(
     QWidget,
     QDialog,
     QMessageBox,
+    QInputDialog,
     QVBoxLayout,
     QHBoxLayout,
     QGridLayout,
@@ -40,36 +37,13 @@ from PyQt6.QtWidgets import(
     QLineEdit,
     QComboBox
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
 from functools import partial
 
 
-# Probar metodos para los pacientes
-#list_paciente = get_pacientes()
-#if not list_paciente == None:
-#    for paciente in list_paciente:
-#        print(
-#            f'ID: {paciente[0]}\n'
-#            f'Name: {paciente[1]}\n'
-#            f'Remove: {paciente[2]}\n'
-#            f'Date: {paciente[3]}\n\n'
-#        )
-
-#save_paciente(name='Una tercera persona')
-#remove_id(id=2)
-#set_id(id=2)
-
-#print(get_data())
-#print( get_id_name() )
-#print( get_id_dir() )
-#print( f'{type( get_id() )} {get_id()}' )
-#print( f'{type( get_all_id() )} {get_all_id()}' )
-
-#print(get_pacientes())
+#for paciente in get_pacientes():
+#    print(paciente)
 #input()
-
-# Probar get diente
-#print(get_diente())
 
 
 class Window_Main(QWidget):
@@ -103,7 +77,7 @@ class Window_Main(QWidget):
             current_paciente = get_id_name()
             if not current_paciente == None:
                 current_paciente = self.combobox_paciente.findText(
-                    current_paciente
+                    f'{get_id()}. {current_paciente}'
                 )
                 self.combobox_paciente.setCurrentIndex(current_paciente)
                 
@@ -282,9 +256,9 @@ class Window_Main(QWidget):
         # Numero de diente y Botones
         # Posicionados asi:
         # Numero
-        # 1   2
-        #   3
-        # 4   5
+        #   1 
+        # 2 3 4
+        #   5
         grid = QGridLayout()
         grid.setSpacing(0) # Espaciado entre botones
 
@@ -309,7 +283,7 @@ class Window_Main(QWidget):
             )
         )
         button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 1, 0)
+        grid.addWidget(button_color, 1, 1)
 
         # Boton 2
         button_color = QPushButton()
@@ -327,7 +301,7 @@ class Window_Main(QWidget):
             )
         )
         button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 1, 3)
+        grid.addWidget(button_color, 2, 0)
 
         # Boton 3
         button_color = QPushButton()
@@ -345,7 +319,7 @@ class Window_Main(QWidget):
             )
         )
         button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 2, 2)
+        grid.addWidget(button_color, 2, 1)
 
         # Boton 4
         button_color = QPushButton()
@@ -363,7 +337,7 @@ class Window_Main(QWidget):
             )
         )
         button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 3, 0)
+        grid.addWidget(button_color, 2, 2)
 
         # Boton 5
         button_color = QPushButton()
@@ -381,7 +355,7 @@ class Window_Main(QWidget):
             )
         )
         button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 3, 3)
+        grid.addWidget(button_color, 3, 1)
         
         return grid
     
@@ -392,47 +366,71 @@ class Window_Main(QWidget):
         if not list_paciente == None:
             for paciente in list_paciente:
                 if paciente[2] == 0:
-                    dict_paciente.update( {paciente[1] : paciente[0]} )
+                    dict_paciente.update( 
+                        {f'{paciente[0]}. {paciente[1]}' : paciente[0]} 
+                    )
             return dict_paciente
     
     def evt_set_paciente(self):
+        # Seleccionar un paciente
         dict_paciente = self.dict_paciente()
         
         paciente = self.combobox_paciente.currentText()
         if paciente in dict_paciente:
-            set_id( id=dict_paciente[paciente] )
-            # Cerrar y volver abrir el programa
+            id = dict_paciente[paciente]
+            set_id( id=id )
+
             warning_exit(self)
             self.close()
         else:
             pass
     
     def evt_new_paciente(self):
-        Dialog_new_paciente(self).exec()
+        # Crear un nuevo paciente
+        new_paciente, ok = QInputDialog.getText(
+            self,
+            Lang('add_paciente'),
+            
+            Lang('paciente')
+        )
+        if ok and new_paciente:
+            if new_paciente == '':
+                pass
+            else:
+                save_paciente(new_paciente)
+                warning_exit(self)
+                self.close()
+        else:
+            pass
     
     def evt_remove_paciente(self):
         # Dar de baja un paciente
         paciente = self.combobox_paciente.currentText()
 
-        # Pregunta si quiere borrar o no.
-        message_quest = QMessageBox.question(
-            self,
-            Lang('remove'),
+        if not paciente == '':
+            # Pregunta si quiere borrar el paciente o no.
+            message_quest = QMessageBox.question(
+                self,
+                Lang('remove'),
 
-            f'{Lang("quest_remove_paciente")}:\n'
-            f'"{paciente}"',
+                f'{Lang("quest_remove_paciente")}:\n'
+                f'"{paciente}"',
+                
+                QMessageBox.StandardButton.Yes |
+                QMessageBox.StandardButton.No
+            )
             
-            QMessageBox.StandardButton.Yes |
-            QMessageBox.StandardButton.No
-        )
-        
-        if message_quest == QMessageBox.StandardButton.Yes:
-            # Dar de baja el Paciente actual en el Combo Box
-            dict_paciente = self.dict_paciente()
-            if not dict_paciente == None:
-                remove_id( dict_paciente[paciente] )
-                warning_exit(self)
-                self.close()
+            if (
+                message_quest == QMessageBox.StandardButton.Yes
+            ):
+                # Dar de baja el Paciente actual en el Combo Box
+                dict_paciente = self.dict_paciente()
+                if not dict_paciente == None:
+                    remove_id( dict_paciente[paciente] )
+                    warning_exit(self)
+                    self.close()
+            else:
+                pass
         else:
             pass
             
@@ -477,9 +475,8 @@ class Window_Main(QWidget):
         )
 
 
-def warning_exit(parent=None):
+def warning_exit(parent=None, thread=True):
     import threading
-
     # Mensaje de advertencia, ¡que se cerrara el programa!
     QMessageBox.warning(
         parent,
@@ -490,10 +487,13 @@ def warning_exit(parent=None):
     )
 
     # Hilo/Subproceso para volver a abrir esta app
-    thread = threading.Thread(
-        target=reboot_app
-    )
-    thread.start()
+    if thread == True:
+        thread = threading.Thread(
+            target=reboot_app
+        )
+        thread.start()
+    else:
+        pass
     
     # Salir
     app.exit()
@@ -510,41 +510,6 @@ def reboot_app():
     elif system == 'win':
         #subprocess.run(['start', '.\\Dientos.exe'])
         subprocess.run(['python', 'Dientos.py'])
-
-
-class Dialog_new_paciente(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle(Lang('add_paciente'))
-        self.resize(256, -1)
-        
-        # Contenedor principal
-        vbox_main = QVBoxLayout()
-        self.setLayout(vbox_main)
-        
-        # Secciones verticales - Entry de paciente y button para crear paciente
-        self.entry_paciente = QLineEdit(
-            self,
-            placeholderText=Lang('paciente')
-        )
-        vbox_main.addWidget(self.entry_paciente)
-        
-        vbox_main.addStretch()
-        
-        button_new_paciente = QPushButton( Lang('add') )
-        button_new_paciente.clicked.connect(self.evt_new_paciente)
-        vbox_main.addWidget(button_new_paciente)
-    
-    def evt_new_paciente(self):
-        paciente = self.entry_paciente.text()
-        if paciente == '':
-            pass
-        else:
-            save_paciente(paciente)
-
-            # Se supone que se tiene que reiniciar la app - Y solo se cierra
-            warning_exit(self)
-            app.exit()
 
 
 if __name__ == '__main__':

@@ -143,3 +143,4 @@ you_need_open_app=Tendra que volver a abrir la aplicacion
 paciente_teeth=Dientes de paciente
 add_paciente=Agregar nuevo paciente
 paciente=Paciente
+quest_remove_paciente=¿Quiere eliminar este paciente?
