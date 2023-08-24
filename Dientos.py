@@ -46,51 +46,37 @@ class Window_Main(QWidget):
         super().__init__(*args, **kwargs)
         
         self.setWindowTitle( Lang('paciente_teeth') )
-        self.resize(256, 256)
+        #self.resize(256, 256)
         
         # Contenedor principal
         vbox_main = QVBoxLayout()
         self.setLayout(vbox_main)
         
         # Seccion Vertical 0
-        # Boton para guardar y borrar, y seleccionar paciente
+        # Boton para guardar y borrar, y combobox para seleccionar paciente
         # Contenedor Horizontal
         hbox = QHBoxLayout()
         vbox_main.addLayout(hbox)
         
-        button_set_paciente = QPushButton(Lang('select'))
-        button_set_paciente.clicked.connect(self.evt_set_paciente)
-        hbox.addWidget(button_set_paciente)
+        button_new_paciente = QPushButton(Lang('new'))
+        button_new_paciente.clicked.connect(self.evt_new_paciente)
+        hbox.addWidget(button_new_paciente)
         
         hbox.addStretch()
         
         self.combobox_paciente = QComboBox()
         dict_paciente = self.dict_paciente()
-        for paciente in dict_paciente.keys():
-            self.combobox_paciente.addItem( paciente )
-
-            current_paciente = get_id_name()
-            if not current_paciente == None:
-                current_paciente = self.combobox_paciente.findText(
-                    f'{get_id()}. {current_paciente}'
-                )
-                self.combobox_paciente.setCurrentIndex(current_paciente)
+        self.update_combobox()
+        self.combobox_paciente.activated.connect(self.evt_set_paciente)
                 
 
         hbox.addWidget(self.combobox_paciente)
         
         hbox.addStretch()
         
-        vbox = QVBoxLayout()
-        hbox.addLayout(vbox)
-
-        button_new_paciente = QPushButton(Lang('new'))
-        button_new_paciente.clicked.connect(self.evt_new_paciente)
-        vbox.addWidget(button_new_paciente)
-        
         button_remove_paciente = QPushButton(Lang('remove'))
         button_remove_paciente.clicked.connect(self.evt_remove_paciente)
-        vbox.addWidget(button_remove_paciente)
+        hbox.addWidget(button_remove_paciente)
         
         # Espaciando, para separar botones de dientes, de botones de sleccion de paciente
         vbox_main.addStretch()
@@ -98,6 +84,11 @@ class Window_Main(QWidget):
         # Espacio entre botones
         space = int(square/2)
         
+        # Diccionario que guardara los dientes: y sus colores.
+        self.dict_diente = {
+            #numero de diente: lista de botones.
+        }
+
         # Seccion Vertical 1
         # Contenedor Horizontal - Dientes/Botones 1.8 - 1.1
         hbox = QHBoxLayout()
@@ -116,8 +107,19 @@ class Window_Main(QWidget):
             # 1   2
             #   3
             # 4   5
-            hbox.addLayout(
+            self.diente=(
                 self.diente_buttons(number=number, square=square)
+            )
+            self.dict_diente.update(
+                {
+                    number :
+                    [ self.diente[1], self.diente[2],
+                    self.diente[3], self.diente[4],
+                    self.diente[5] ]
+                }
+            )
+            hbox.addLayout(
+                self.diente[0]
             )
         
         # Seccion Vertical 1
@@ -129,8 +131,19 @@ class Window_Main(QWidget):
             number = round(number, 2)
 
             # Establecer el Diente y sus botones
-            hbox.addLayout(
+            self.diente=(
                 self.diente_buttons(number=number, square=square)
+            )
+            self.dict_diente.update(
+                {
+                    number :
+                    [ self.diente[1], self.diente[2],
+                    self.diente[3], self.diente[4],
+                    self.diente[5] ]
+                }
+            )
+            hbox.addLayout(
+                self.diente[0]
             )
         
         hbox.addStretch()
@@ -150,8 +163,19 @@ class Window_Main(QWidget):
             number = round(number, 2)
 
             # Establecer el Diente y sus botones
-            hbox.addLayout(
+            self.diente=(
                 self.diente_buttons(number=number, square=square)
+            )
+            self.dict_diente.update(
+                {
+                    number :
+                    [ self.diente[1], self.diente[2],
+                    self.diente[3], self.diente[4],
+                    self.diente[5] ]
+                }
+            )
+            hbox.addLayout(
+                self.diente[0]
             )
             
         # Seccion Vertical 2
@@ -163,8 +187,19 @@ class Window_Main(QWidget):
             number = round(number, 2)
 
             # Establecer el Diente y sus botones
-            hbox.addLayout(
+            self.diente=(
                 self.diente_buttons(number=number, square=square)
+            )
+            self.dict_diente.update(
+                {
+                    number :
+                    [ self.diente[1], self.diente[2],
+                    self.diente[3], self.diente[4],
+                    self.diente[5] ]
+                }
+            )
+            hbox.addLayout(
+                self.diente[0]
             )
         
         hbox.addStretch()
@@ -184,8 +219,19 @@ class Window_Main(QWidget):
             number = round(number, 2)
 
             # Establecer el Diente y sus botones
-            hbox.addLayout(
+            self.diente=(
                 self.diente_buttons(number=number, square=square)
+            )
+            self.dict_diente.update(
+                {
+                    number :
+                    [ self.diente[1], self.diente[2],
+                    self.diente[3], self.diente[4],
+                    self.diente[5] ]
+                }
+            )
+            hbox.addLayout(
+                self.diente[0]
             )
 
         # Seccion Vertical 3
@@ -197,8 +243,19 @@ class Window_Main(QWidget):
             number = round(number, 2)
 
             # Establecer el Diente y sus botones
-            hbox.addLayout(
+            self.diente=(
                 self.diente_buttons(number=number, square=square)
+            )
+            self.dict_diente.update(
+                {
+                    number :
+                    [ self.diente[1], self.diente[2],
+                    self.diente[3], self.diente[4],
+                    self.diente[5] ]
+                }
+            )
+            hbox.addLayout(
+                self.diente[0]
             )
         
         hbox.addStretch()
@@ -221,8 +278,19 @@ class Window_Main(QWidget):
             # 1   2
             #   3
             # 4   5
-            hbox.addLayout(
+            self.diente=(
                 self.diente_buttons(number=number, square=square)
+            )
+            self.dict_diente.update(
+                {
+                    number :
+                    [ self.diente[1], self.diente[2],
+                    self.diente[3], self.diente[4],
+                    self.diente[5] ]
+                }
+            )
+            hbox.addLayout(
+                self.diente[0]
             )
         
         # Seccion Vertical 4
@@ -234,14 +302,28 @@ class Window_Main(QWidget):
             number = round(number, 2)
 
             # Establecer el Diente y sus botones
-            hbox.addLayout(
+            self.diente=(
                 self.diente_buttons(number=number, square=square)
+            )
+            self.dict_diente.update(
+                {
+                    number :
+                    [ self.diente[1], self.diente[2],
+                    self.diente[3], self.diente[4],
+                    self.diente[5] ]
+                }
+            )
+            hbox.addLayout(
+                self.diente[0]
             )
             
         hbox.addStretch()
         
         # Espaciando, para separar botones de dientes, de botones de sleccion de paciente
         vbox_main.addStretch()
+        
+        # Obtener los colores de cada diente
+        self.get_diente_colors()
         
         # Mostrar todo
         self.showMaximized()
@@ -266,96 +348,125 @@ class Window_Main(QWidget):
         grid.addWidget(button, 0, 0)
 
         # Boton 1
-        button_color = QPushButton()
-
-        color = get_section_color(diente=number, section=1)
-        if not color == None:
-            button_color.setStyleSheet(
-                f'background-color: {color}' 
-            )
-
-        button_color.clicked.connect(
+        button_1 = QPushButton()
+        button_1.clicked.connect(
             partial(
-                self.evt_change_color, button=button_color,
+                self.evt_change_color, button=button_1,
                 number=number, number_square=1
             )
         )
-        button_color.setFixedSize(square*3, square)
-        grid.addWidget(button_color, 1, 0, 1, 3)
+        button_1.setFixedSize(square*3, square)
+        grid.addWidget(button_1, 1, 0, 1, 3)
 
         # Boton 2
-        button_color = QPushButton()
-        
-        color = get_section_color(diente=number, section=2)
-        if not color == None:
-            button_color.setStyleSheet(
-                f'background-color: {color}' 
-            )
-
-        button_color.clicked.connect(
+        button_2 = QPushButton()
+        button_2.clicked.connect(
             partial(
-                self.evt_change_color, button=button_color,
+                self.evt_change_color, button=button_2,
                 number=number, number_square=2
             )
         )
-        button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 2, 0)
+        button_2.setFixedSize(square, square)
+        grid.addWidget(button_2, 2, 0)
 
         # Boton 3
-        button_color = QPushButton()
-
-        color = get_section_color(diente=number, section=3)
-        if not color == None:
-            button_color.setStyleSheet(
-                f'background-color: {color}' 
-            )
-
-        button_color.clicked.connect(
+        button_3 = QPushButton()
+        button_3.clicked.connect(
             partial(
-                self.evt_change_color, button=button_color,
+                self.evt_change_color, button=button_3,
                 number=number, number_square=3
             )
         )
-        button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 2, 1)
+        button_3.setFixedSize(square, square)
+        grid.addWidget(button_3, 2, 1)
 
         # Boton 4
-        button_color = QPushButton()
-        
-        color = get_section_color(diente=number, section=4)
-        if not color == None:
-            button_color.setStyleSheet(
-                f'background-color: {color}' 
-            )
-
-        button_color.clicked.connect(
+        button_4 = QPushButton()
+        button_4.clicked.connect(
             partial(
-                self.evt_change_color, button=button_color,
+                self.evt_change_color, button=button_4,
                 number=number, number_square=4
             )
         )
-        button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 2, 2)
+        button_4.setFixedSize(square, square)
+        grid.addWidget(button_4, 2, 2)
 
         # Boton 5
-        button_color = QPushButton()
-
-        color = get_section_color(diente=number, section=5)
-        if not color == None:
-            button_color.setStyleSheet(
-                f'background-color: {color}' 
-            )
-
-        button_color.clicked.connect(
+        button_5 = QPushButton()
+        button_5.clicked.connect(
             partial(
-                self.evt_change_color, button=button_color,
+                self.evt_change_color, button=button_5,
                 number=number, number_square=5
             )
         )
-        button_color.setFixedSize(square*3, square)
-        grid.addWidget(button_color, 3, 0, 3, 3)
+        button_5.setFixedSize(square*3, square)
+        grid.addWidget(button_5, 3, 0, 3, 3)
         
-        return grid
+        return [grid, button_1, button_2, button_3, button_4, button_5]
+
+    def get_diente_colors(self):
+        # Obener los colore de cada diente disponible
+        for key in self.dict_diente.keys():
+            number = key
+            diente = self.dict_diente[key]
+
+            button_1 = diente[0]
+            button_2 = diente[1]
+            button_3 = diente[2]
+            button_4 = diente[3]
+            button_5 = diente[4]
+            
+            color = get_section_color(diente=number, section=1)
+            if not color == None:
+                button_1.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+            color = get_section_color(diente=number, section=2)
+            if not color == None:
+                button_2.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+            color = get_section_color(diente=number, section=3)
+            if not color == None:
+                button_3.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+            color = get_section_color(diente=number, section=4)
+            if not color == None:
+                button_4.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+            color = get_section_color(diente=number, section=5)
+            if not color == None:
+                button_5.setStyleSheet(
+                    f'background-color: {color}' 
+                )
+
+    def clear_diente_colors(self):
+        # Limpiar los colores de todos los dientes.
+        for key in self.dict_diente.keys():
+            number = key
+            diente = self.dict_diente[key]
+
+            button_1 = diente[0]
+            button_2 = diente[1]
+            button_3 = diente[2]
+            button_4 = diente[3]
+            button_5 = diente[4]
+            
+            button_1.setStyleSheet('')
+            button_2.setStyleSheet('')
+            button_3.setStyleSheet('')
+            button_4.setStyleSheet('')
+            button_5.setStyleSheet('')
+    
+    def update_diente_colors(self):
+        self.clear_diente_colors()
+        self.get_diente_colors()
     
     def dict_paciente(self):
         dict_paciente = {}
@@ -369,6 +480,21 @@ class Window_Main(QWidget):
                     )
             return dict_paciente
     
+    def update_combobox(self):
+        # Limpiar combobox, y agregar pacientes al combobox.
+        # Asi: numero_id. nombre_paciente
+        self.combobox_paciente.clear()
+        dict_paciente = self.dict_paciente()
+        for paciente in dict_paciente.keys():
+            self.combobox_paciente.addItem( paciente )
+
+            current_paciente = get_id_name()
+            if not current_paciente == None:
+                current_paciente = self.combobox_paciente.findText(
+                    f'{get_id()}. {current_paciente}'
+                )
+                self.combobox_paciente.setCurrentIndex(current_paciente)
+    
     def evt_set_paciente(self):
         # Seleccionar un paciente
         dict_paciente = self.dict_paciente()
@@ -378,8 +504,9 @@ class Window_Main(QWidget):
             id = dict_paciente[paciente]
             set_id( id=id )
 
-            warning_exit(self)
-            self.close()
+            self.update_diente_colors()
+            #warning_exit(self)
+            #self.close()
         else:
             pass
     
@@ -396,8 +523,10 @@ class Window_Main(QWidget):
                 pass
             else:
                 save_paciente(new_paciente)
-                warning_exit(self)
-                self.close()
+                self.update_diente_colors()
+                self.update_combobox()
+                #warning_exit(self)
+                #self.close()
         else:
             pass
     
@@ -425,8 +554,10 @@ class Window_Main(QWidget):
                 dict_paciente = self.dict_paciente()
                 if not dict_paciente == None:
                     remove_id( dict_paciente[paciente] )
-                    warning_exit(self)
-                    self.close()
+                    self.update_diente_colors()
+                    self.update_combobox()
+                    #warning_exit(self)
+                    #self.close()
             else:
                 pass
         else:
