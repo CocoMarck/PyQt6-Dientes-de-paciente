@@ -1,0 +1,14 @@
+# Esto es el contador en un 'id_dientes.dat'
+all_id=80
+# Numero de ids - Carpetas de Pacientes
+
+current_id=1
+# ID actual - Carpeta del paciente actual
+
+current_id_name=Default
+# Nombre actual del id - nombre del paciente
+
+
+
+# Esto se guardara en un 'paciente.csv'
+PacienteID, Nombre, Baja, Fecha

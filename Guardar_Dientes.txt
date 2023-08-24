@@ -1,0 +1,10 @@
+1.5=None,None,None,None
+# Estara primero el Numero de diente, y sera igual a una lista de colores
+
+# Estos son los colores: green, blue, red, black, none
+# Los none es un boton sin color, por defecto estaran con un none:
+
+# None,     None,   None,   None,   None
+# boton1,   boton2, boton3, boton4, boton5
+
+# Es necesario que se guarden los botones por medio de un click en el boton "guardar paciente", esto con el fin de facilitar las demas funciones; nuevo paciente, seleccionar paciente, eliminar paciente.
