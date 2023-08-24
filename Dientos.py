@@ -96,7 +96,7 @@ class Window_Main(QWidget):
         vbox_main.addStretch()
         
         # Espacio entre botones
-        space = int(square*1.1)
+        space = int(square/2)
         
         # Seccion Vertical 1
         # Contenedor Horizontal - Dientes/Botones 1.8 - 1.1
@@ -244,16 +244,19 @@ class Window_Main(QWidget):
         vbox_main.addStretch()
         
         # Mostrar todo
-        self.show()
+        self.showMaximized()
+        #self.show()
     
     def diente_buttons(self, number=1.8, square=24):
         # Grid para posicionar botones
         # Numero de diente y Botones
         # Posicionados asi:
         # Numero
-        #   1 
+        # 1 1 1
         # 2 3 4
-        #   5
+        # 5 5 5
+        # Numero "1" estirado de "2 a 4" (no tres 1)
+        # Numero "3" estirado de "2 a 4" (no tres 5)
         grid = QGridLayout()
         grid.setSpacing(0) # Espaciado entre botones
 
@@ -273,12 +276,12 @@ class Window_Main(QWidget):
 
         button_color.clicked.connect(
             partial(
-                self.evt_change_color_good, button=button_color,
+                self.evt_change_color, button=button_color,
                 number=number, number_square=1
             )
         )
-        button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 1, 1)
+        button_color.setFixedSize(square*3, square)
+        grid.addWidget(button_color, 1, 0, 1, 3)
 
         # Boton 2
         button_color = QPushButton()
@@ -291,7 +294,7 @@ class Window_Main(QWidget):
 
         button_color.clicked.connect(
             partial(
-                self.evt_change_color_good, button=button_color,
+                self.evt_change_color, button=button_color,
                 number=number, number_square=2
             )
         )
@@ -309,7 +312,7 @@ class Window_Main(QWidget):
 
         button_color.clicked.connect(
             partial(
-                self.evt_change_color_good, button=button_color,
+                self.evt_change_color, button=button_color,
                 number=number, number_square=3
             )
         )
@@ -327,7 +330,7 @@ class Window_Main(QWidget):
 
         button_color.clicked.connect(
             partial(
-                self.evt_change_color_good, button=button_color,
+                self.evt_change_color, button=button_color,
                 number=number, number_square=4
             )
         )
@@ -345,12 +348,12 @@ class Window_Main(QWidget):
 
         button_color.clicked.connect(
             partial(
-                self.evt_change_color_good, button=button_color,
+                self.evt_change_color, button=button_color,
                 number=number, number_square=5
             )
         )
-        button_color.setFixedSize(square, square)
-        grid.addWidget(button_color, 3, 1)
+        button_color.setFixedSize(square*3, square)
+        grid.addWidget(button_color, 3, 0, 3, 3)
         
         return grid
     
@@ -429,7 +432,7 @@ class Window_Main(QWidget):
         else:
             pass
             
-    def evt_change_color_good(self, button, number, number_square):
+    def evt_change_color(self, button, number, number_square):
         # Detectar el color actual del boton y cambiarlo en base a eso.
         color = button.styleSheet()
         
@@ -499,12 +502,13 @@ def reboot_app():
     import subprocess
     
     system = get_system()
+    app_exec = 'Dientos'
     if system == 'linux':
-        #subprocess.run(['./Dientos'])
-        subprocess.run(['python3', 'Dientos.py'])
+        #subprocess.run([f'./{app_exec}'])
+        subprocess.run(['python3', f'{app_exec}.py'])
     elif system == 'win':
-        #subprocess.run(['start', '.\\Dientos.exe'])
-        subprocess.run(['python', 'Dientos.py'])
+        #subprocess.run(['start', f'{app_exec}.exe'])
+        subprocess.run(['python', f'{app_exec}.py'])
 
 
 if __name__ == '__main__':
