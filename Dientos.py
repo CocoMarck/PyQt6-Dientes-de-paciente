@@ -68,9 +68,9 @@ class Window_Main(QWidget):
         dict_paciente = self.dict_paciente()
         self.update_combobox()
         self.combobox_paciente.activated.connect(self.evt_set_paciente)
-                
-
+        self.combobox_paciente.setFixedSize(512, 24)
         hbox.addWidget(self.combobox_paciente)
+        #hbox.setStretchFactor(self.combobox_paciente, 1)
         
         hbox.addStretch()
         
@@ -121,6 +121,11 @@ class Window_Main(QWidget):
             hbox.addLayout(
                 self.diente[0]
             )
+            
+        # Cruz - Linea Horizontal 1
+        label = QLabel()
+        label.setStyleSheet('QLabel{background-color:black}')
+        hbox.addWidget(label)
         
         # Seccion Vertical 1
         # Contenedor Horizontal - Dientes/Botones 2.1 - 2.8
@@ -178,6 +183,11 @@ class Window_Main(QWidget):
                 self.diente[0]
             )
             
+        # Cruz - Linea Horizontal 2
+        label = QLabel()
+        label.setStyleSheet('QLabel{background-color:black}')
+        hbox.addWidget(label)
+            
         # Seccion Vertical 2
         # Contenedor Horizontal - Dientes/Botones 6.1 - 6.5
         number = 6.0
@@ -203,6 +213,14 @@ class Window_Main(QWidget):
             )
         
         hbox.addStretch()
+        
+        # Cruz Linea Vertical
+        label = QLabel()
+        label.setStyleSheet('QLabel{background-color:black}')
+        #label.setFixedSize(
+        #    ( (square*48) + ( (space)*16 ) ), 8
+        #)
+        vbox_main.addWidget(label)
             
         # Seccion Vertical 3
         # Contenedor Horizontal - Dientes/Botones 8.5 - 8.1
@@ -233,6 +251,11 @@ class Window_Main(QWidget):
             hbox.addLayout(
                 self.diente[0]
             )
+        
+        # Cruz - Linea Horizontal 3
+        label = QLabel()
+        label.setStyleSheet('QLabel{background-color:black}')
+        hbox.addWidget(label)
 
         # Seccion Vertical 3
         # Contenedor Horizontal - Dientes/Botones 7.1 - 7.5
@@ -292,6 +315,11 @@ class Window_Main(QWidget):
             hbox.addLayout(
                 self.diente[0]
             )
+            
+        # Cruz - Linea Horizontal 4
+        label = QLabel()
+        label.setStyleSheet('QLabel{background-color:black}')
+        hbox.addWidget(label)
         
         # Seccion Vertical 4
         # Contenedor Horizontal - Dientes/Botones 3.1 - 3.8
