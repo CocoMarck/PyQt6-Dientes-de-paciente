@@ -16,30 +16,63 @@ dir_dientes='info_dientes'
 
 
 def get_data(mode_dict=True):
-    '''Obtener datos de cantidad de ids, el id actual y su nombre'''
-    # Leer texto y ignorar comentarios tipo '#'
-    id_dientes_archive = Text_Read(
-        f'{dir_dientes}/id_dientes.dat',
-        'ModeText'
-    )
-    id_dientes_data = Ignore_Comment(
-        text=id_dientes_archive,
-        comment='#'
-    )
-    # Agregar valores en el texto a un diccionario
-    id_dientes_data = Text_Separe(
-        text=id_dientes_data,
-        text_separe='='
-    )
-    
-    # Retornar en modo solo los datos en modo diccionario
-    # O retornar el texto completo
-    if mode_dict == True:
-        # Retornar en modo diccionario
-        return id_dientes_data
+    '''Obtener datos de cantidad de ids, el id actual y su nombre'''    
+    id_dientes_file = f'{dir_dientes}/id_dientes.dat'
+    if os.path.isfile(id_dientes_file):
+        # Leer texto y ignorar comentarios tipo '#'
+        id_dientes_archive = Text_Read(
+            id_dientes_file,
+            'ModeText'
+        )
+        id_dientes_data = Ignore_Comment(
+            text=id_dientes_archive,
+            comment='#'
+        )
+        # Agregar valores en el texto a un diccionario
+        id_dientes_data = Text_Separe(
+            text=id_dientes_data,
+            text_separe='='
+        )
+        
+        # Retornar en modo solo los datos en modo diccionario
+        # O retornar el texto completo
+        if mode_dict == True:
+            # Retornar en modo diccionario
+            return id_dientes_data
+        else:
+            # Retornar en modo texto
+            return id_dientes_archive
     else:
-        # Retornar en modo texto
-        return id_dientes_archive
+        all_pacientes = 0
+        for paciente in get_pacientes():
+            all_pacientes += 1
+
+        with open(id_dientes_file, 'w') as id_dientes:
+            id_dientes.write(
+                f'all_id={all_pacientes}\n'
+                'current_id=\n'
+                'current_id_name='
+            )
+
+        # Leer texto
+        id_dientes_data = Text_Read(
+            id_dientes_file,
+            'ModeText'
+        )
+        # Agregar valores en el texto a un diccionario
+        id_dientes_data = Text_Separe(
+            text=id_dientes_data,
+            text_separe='='
+        )
+        
+        # Retornar en modo solo los datos en modo diccionario
+        # O retornar el texto completo
+        if mode_dict == True:
+            # Retornar en modo diccionario
+            return id_dientes_data
+        else:
+            # Retornar en modo texto
+            return id_dientes_archive
 
 
 def get_id():
