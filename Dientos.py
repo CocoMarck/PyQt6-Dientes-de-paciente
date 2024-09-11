@@ -1,9 +1,9 @@
-from Modulos.Modulo_System import (
+from logic.Modulo_System import (
     get_system,
     CleanScreen
 )
-from Modulos.Modulo_Language import get_text as Lang
-from Modulos.color_diente import (
+from data.Modulo_Language import get_text as Lang
+from data.color_diente import (
     get_id,
     get_id_name,
 

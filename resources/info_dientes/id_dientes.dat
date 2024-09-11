@@ -1,0 +1,8 @@
+all_id=13
+# Numero de ids - Carpetas de Pacientes
+
+current_id=9
+# ID actual - Carpeta del paciente actual
+
+current_id_name=Loquendo
+# Nombre actual del id - nombre del paciente
